@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html> 
+<head> 
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style> 
+        body {
+            background-color: black; 
+            margin: 0;
+            padding: 0;
+        }
+        .center-wrapper {
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            height: 100vh;
+            position: relative;
+            overflow: hidden;
+        }
+        .patrick-bateman-walk, .timer {
+            display: none;
+            width: 100%; 
+            height: 100%; 
+        }
+        .patrick-bateman-walk img {
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; 
+        }
+        .timer {
+            display: none;
+            position: absolute;
+            bottom: 10%;
+            width: 100%;
+            height: auto;      /* ← lets the div shrink to fit “Freedom Ends:” + the numbers */
+            text-align: center;
+        }
+        .timer p {
+            color: white; 
+            font-size: 80px; 
+            margin: 0;
+        }
+        .reveal-button {
+            position: absolute;
+            z-index: 10;
+            padding: 20px 40px;
+            font-size: 36px;
+            cursor: pointer;
+            border: none;
+            border-radius: 10px;
+            background-color: white;
+            color: black;
+            font-family: sans-serif;
+        }
+    </style>  
+</head>
+<body> 
+    <div class="center-wrapper">
+        <button class="reveal-button" onclick="revealCountdown()">Reveal Countdown</button>
+        <div class="patrick-bateman-walk"> 
+            <img src="https://tenor.com/view/di-caprio-dance-gif-18448672"/> 
+        </div>
+        <div class="timer">
+            <p id="clock">&nbsp;Freedom Ends:<br></p>
+        </div>
+    </div>
+
+    <script>
+        var countDownDate = new Date("July 21, 2025 08:00:00").getTime(); 
+        const clockElement = document.getElementById("clock"); 
+        const baseText = "<div style='margin-bottom: 20px;'>Freedom Ends:</div>";
+        let intervalID = null;
+
+        function updateClock() {
+            var now = new Date().getTime(); 
+            var distance = countDownDate - now; 
+            var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+            clockElement.innerHTML = baseText + `${days}d ${hours}h ${minutes}m ${seconds}s`;
+
+            const boom = new Audio('vine-boom.wav');
+            boom.play().catch(() => {}); // suppress autoplay error
+
+            if (distance < 0) {
+                clearInterval(intervalID);
+                clockElement.innerHTML = "Life is Hell";
+            }
+        }
+
+        function revealCountdown() {
+            document.querySelector('.reveal-button').style.display = 'none';
+            document.querySelector('.patrick-bateman-walk').style.display = 'block';
+            document.querySelector('.timer').style.display = 'block';
+            updateClock();
+            intervalID = setInterval(updateClock, 1000);
+        }
+    </script>
+</body>
+</html>
+
